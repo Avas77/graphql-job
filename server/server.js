@@ -1,28 +1,44 @@
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const express = require('express');
-const expressJwt = require('express-jwt');
-const jwt = require('jsonwebtoken');
-const db = require('./db');
+// npm install @apollo/server express graphql cors
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import express from "express";
+import http from "http";
+import cors from "cors";
+import { typeDefs } from "./schema.js";
+import { resolvers } from "./resolvers.js";
 
-const port = 9000;
-const jwtSecret = Buffer.from('Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt', 'base64');
-
+// Required logic for integrating with Express
 const app = express();
-app.use(cors(), bodyParser.json(), expressJwt({
-  secret: jwtSecret,
-  credentialsRequired: false
-}));
+// Our httpServer handles incoming requests to our Express app.
+// Below, we tell Apollo Server to "drain" this httpServer,
+// enabling our servers to shut down gracefully.
+const httpServer = http.createServer(app);
 
-app.post('/login', (req, res) => {
-  const {email, password} = req.body;
-  const user = db.users.list().find((user) => user.email === email);
-  if (!(user && user.password === password)) {
-    res.sendStatus(401);
-    return;
-  }
-  const token = jwt.sign({sub: user.id}, jwtSecret);
-  res.send({token});
+// Same ApolloServer initialization as before, plus the drain plugin
+// for our httpServer.
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
+// Ensure we wait for our server to start
+await server.start();
 
-app.listen(port, () => console.info(`Server started on port ${port}`));
+// Set up our Express middleware to handle CORS, body parsing,
+// and our expressMiddleware function.
+app.use(
+  "/graphql",
+  cors(),
+  express.json(),
+  // expressMiddleware accepts the same arguments:
+  // an Apollo Server instance and optional configuration options
+  expressMiddleware(server, {
+    context: async ({ req }) => ({ token: req.headers.token }),
+  })
+);
+
+// Modified server startup
+await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+
+console.log(`🚀 Server ready at http://localhost:4000/`);
