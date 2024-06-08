@@ -1,5 +1,10 @@
+import { db } from "./db.js";
+
 export const resolvers = {
   Query: {
-    greeting: () => "Hello World",
+    jobs: () => db.jobs.list(),
+  },
+  Jobs: {
+    company: (job) => db.companies.get(job.companyId),
   },
 };
