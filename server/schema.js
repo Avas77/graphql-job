@@ -5,7 +5,7 @@ export const typeDefs = `
 
     type Company {
         id: ID
-        title: String
+        name: String
         description: String
     }
 
