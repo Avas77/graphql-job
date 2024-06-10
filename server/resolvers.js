@@ -6,6 +6,12 @@ export const resolvers = {
     job: (_, args) => db.jobs.get(args.id),
     company: (_, args) => db.companies.get(args.id),
   },
+  Mutation: {
+    createJob: (_, { args }) => {
+      const id = db.jobs.create(args);
+      return db.jobs.get(id);
+    },
+  },
   Jobs: {
     company: (job) => db.companies.get(job.companyId),
   },

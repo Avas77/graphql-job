@@ -16,5 +16,29 @@
     "companyId": "SJV0-wdOM",
     "title": "Full-Stack Developer",
     "description": "We are looking for a Full-Stack Developer familiar with Node.js, Express, and React."
+  },
+  {
+    "id": "r1K67_NSR",
+    "companyId": "HJRa-DOuG",
+    "title": "Fox in Socks",
+    "description": "Dr. Seuss"
+  },
+  {
+    "id": "H1fANdNBR",
+    "companyId": "HJRa-DOuG",
+    "title": "General manger",
+    "description": "Dr. Seuss"
+  },
+  {
+    "id": "ByfES_4BA",
+    "companyId": "HJRa-DOuG",
+    "title": "General manger",
+    "description": "Dr. Seuss"
+  },
+  {
+    "id": "HJ33PO4H0",
+    "companyId": "HJRa-DOuG",
+    "title": "Store Kepper",
+    "description": "We are looking for a Frontend Developer familiar with React."
   }
 ]

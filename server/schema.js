@@ -5,6 +5,10 @@ export const typeDefs = `
         company(id: ID!): Company
     }
 
+    type Mutation {
+        createJob(args: CreateJobInput): Jobs
+    }
+
     type Company {
         id: ID!
         name: String
@@ -17,5 +21,11 @@ export const typeDefs = `
         title: String
         description: String
         company: Company
+    }
+
+    input CreateJobInput {
+        companyId: ID
+        title: String
+        description: String
     }
 `;
