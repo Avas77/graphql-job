@@ -45,3 +45,26 @@ export async function loadJobs(id) {
   const data = await graphqlRequest(query, variables);
   return data;
 }
+
+export async function loadCompanies(id) {
+  const query = `
+    query CompanyQuery($id: ID!) {
+      company(id: $id) {
+      id
+      name
+      description
+      jobs {
+        id
+        title 
+      }
+      }
+    }
+  `;
+  let data;
+  try {
+    data = await graphqlRequest(query, { id });
+  } catch (error) {
+    console.log(error);
+  }
+  return data;
+}
