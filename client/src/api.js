@@ -68,3 +68,24 @@ export async function loadCompanies(id) {
   }
   return data;
 }
+
+export async function createJob(payload) {
+  const mutation = `
+    mutation CreateJob($args: CreateJobInput) {
+      job: createJob(args: $args) {
+        id
+        title
+        description
+      }
+    }
+  `;
+  let data;
+  try {
+    data = await graphqlRequest(mutation, {
+      args: payload,
+    });
+  } catch (error) {
+    console.log({ error });
+  }
+  return data.job;
+}
