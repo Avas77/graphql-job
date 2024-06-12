@@ -26,22 +26,29 @@ export const resolvers = {
     login: (_, { args }) => {
       let user;
       let token;
+      user = db.users.list().filter((user) => {
+        if (user.email === args.email && user.password === args.password)
+          return user;
+      })[0];
+      if (!user) {
+        throw new GraphQLError("User not found", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
       try {
-        user = db.users.list().filter((user) => {
-          if (user.email === args.email && user.password === args.password)
-            return user;
-        })[0];
         token = jwt.sign(
           {
             id: user.id,
           },
           "user"
         );
+        return token;
       } catch (error) {
         console.log(error);
       }
-      console.log("Token", token);
-      return token;
     },
   },
   Jobs: {
