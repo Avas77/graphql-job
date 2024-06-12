@@ -9,7 +9,7 @@ export const JobDetail = () => {
 
   useEffect(() => {
     loadJobs(jobId).then((res) => setJob(res.job));
-  }, []);
+  }, [jobId]);
 
   if (!job) {
     return null;

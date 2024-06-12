@@ -1,23 +1,35 @@
 // NOTE: this example keeps the access token in LocalStorage just because it's simpler
 // but in a real application you may want to use cookies instead for better security
 
-const accessTokenKey = 'accessToken';
+import { graphqlRequest } from "./api";
+
+const accessTokenKey = "accessToken";
 
 export function getAccessToken() {
   return localStorage.getItem(accessTokenKey);
 }
 
 export async function login(email, password) {
-  const response = await fetch('http://localhost:9000/login', {
-    method: 'POST',
-    headers: {'content-type': 'application/json'},
-    body: JSON.stringify({email, password})
-  });
-  if (response.ok) {
-    const {token} = await response.json();
-    localStorage.setItem(accessTokenKey, token);
+  const mutation = `
+    mutation loginMutation($args: loginInput) {
+      token: login(args: $args)
+    } 
+  `;
+  const payload = {
+    email,
+    password,
+  };
+
+  try {
+    const data = await graphqlRequest(mutation, {
+      args: payload,
+    });
+    console.log({ data });
+    localStorage.setItem(accessTokenKey, data.token);
+    return data;
+  } catch (error) {
+    console.log(error);
   }
-  return response.ok;
 }
 
 export function isLoggedIn() {

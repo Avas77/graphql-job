@@ -1,6 +1,6 @@
 const url = "http://localhost:4000/graphql";
 
-async function graphqlRequest(query, variables = {}) {
+export async function graphqlRequest(query, variables = {}) {
   const response = await fetch(url, {
     method: "POST",
     headers: {
