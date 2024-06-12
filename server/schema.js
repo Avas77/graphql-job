@@ -7,6 +7,7 @@ export const typeDefs = `
 
     type Mutation {
         createJob(args: CreateJobInput): Jobs
+        login(args: loginInput): String
     }
 
     type Company {
@@ -27,5 +28,10 @@ export const typeDefs = `
         companyId: ID
         title: String
         description: String
+    }
+
+    input loginInput {
+        email: String
+        password: String
     }
 `;

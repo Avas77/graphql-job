@@ -34,7 +34,10 @@ app.use(
   // expressMiddleware accepts the same arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
-    context: async ({ req }) => ({ token: req.headers.token }),
+    context: async ({ req }) => {
+      const token = req.headers.authorization || "";
+      return { token };
+    },
   })
 );
 
