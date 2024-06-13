@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export class JobList extends Component {
   render() {
     const { jobs } = this.props;
-    if (!jobs) return null;
+    if (!jobs) return <p>You need to login to view jobs</p>;
     return <ul className="box">{jobs.map(this.renderJob.bind(this))}</ul>;
   }
 
