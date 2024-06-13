@@ -7,6 +7,7 @@ import http from "http";
 import cors from "cors";
 import { typeDefs } from "./schema.js";
 import { resolvers } from "./resolvers.js";
+import jwt from "jsonwebtoken";
 
 // Required logic for integrating with Express
 const app = express();
@@ -36,6 +37,9 @@ app.use(
   expressMiddleware(server, {
     context: async ({ req }) => {
       const token = req.headers.authorization || "";
+      const tokenArr = token.split(" ");
+      const decodedToken = jwt.verify(tokenArr[1], "user");
+      console.log({ decodedToken, tokenArr: tokenArr[1] });
       return { token };
     },
   })

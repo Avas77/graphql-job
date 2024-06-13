@@ -4,7 +4,14 @@ import jwt from "jsonwebtoken";
 
 export const resolvers = {
   Query: {
-    jobs: (_, args, context) => {
+    jobs: () => {
+      return db.jobs.list();
+    },
+    job: (_, args) => db.jobs.get(args.id),
+    company: (_, args) => db.companies.get(args.id),
+  },
+  Mutation: {
+    createJob: (_, { args }, context) => {
       if (!context.token) {
         throw new GraphQLError("User is not authenticated", {
           extensions: {
@@ -13,13 +20,6 @@ export const resolvers = {
           },
         });
       }
-      return db.jobs.list();
-    },
-    job: (_, args) => db.jobs.get(args.id),
-    company: (_, args) => db.companies.get(args.id),
-  },
-  Mutation: {
-    createJob: (_, { args }) => {
       const id = db.jobs.create(args);
       return db.jobs.get(id);
     },
